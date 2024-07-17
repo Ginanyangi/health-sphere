@@ -7,12 +7,10 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-# from django.contrib.auth.forms import SetPasswordForm
-# from django.contrib import messages
-# from django.shortcuts import redirect
 
-from accounts.models import CustomUser
-from accounts.serializers import UserRegistrationSerializer, LoginSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer ,CustomUserSerializer
+
+from accounts.models import CustomUser,Contact
+from accounts.serializers import UserRegistrationSerializer, LoginSerializer, PasswordResetSerializer, PasswordResetConfirmSerializer ,CustomUserSerializer,ContactSerializer
 from accounts.permissions import IsAdminUser, IsStaffUser
 
 User = get_user_model()
@@ -73,7 +71,7 @@ class PasswordResetRequestView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'success': 'Password reset email has been sent.'}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
     
 class PasswordResetConfirmView(APIView):
     permission_classes = [AllowAny]
@@ -93,3 +91,20 @@ class PasswordResetConfirmView(APIView):
             return Response({'success': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid token or user ID'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ContactFormView(APIView):
+    def post(self, request, *args ,**kwargs):
+        serializer = ContactSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data)

@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 from accounts.views import  (
     AdminOnlyView, StaffOnlyView,UserListView, UserListCreateView,
     ObtainTokenPairWithRoleView, PasswordResetRequestView,
-    PasswordResetConfirmView
+    PasswordResetConfirmView,ContactFormView, CurrentUserView
 )
 
 urlpatterns = [
@@ -16,4 +16,6 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('api-token-auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('contact/',ContactFormView.as_view(), name='contact_form'),
+    path('me/', CurrentUserView.as_view(), name='current-user'),
 ]

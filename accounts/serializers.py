@@ -6,7 +6,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.conf import settings
-from accounts.models import CustomUser
+from accounts.models import CustomUser,Contact
 
 CustomUser = get_user_model()
 
@@ -25,7 +25,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
     password = serializers.CharField(write_only=True)
-
+    full_name = serializers.CharField(required=True)
+    role = serializers.ChoiceField(choices=CustomUser.ROLE_CHOICES, required=True)
+    phone_number = serializers.CharField(required=True)
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'full_name', 'role', 'phone_number', 'email', 'password']
@@ -89,3 +91,8 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = '__all__'

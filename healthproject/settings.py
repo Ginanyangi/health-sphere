@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,15 +83,19 @@ WSGI_APPLICATION = 'healthproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#       'NAME': 'healthmap',
+#       'USER': 'postgres',
+#       'PASSWORD': 'nyangi0507',
+#       'HOST': 'localhost',
+#       'PORT': '5432',  
+#     }
+# }
+
 DATABASES = {
-    'default': {
-      'ENGINE': 'django.db.backends.postgresql_psycopg2',
-      'NAME': 'healthmap',
-      'USER': 'postgres',
-      'PASSWORD': 'nyangi0507',
-      'HOST': 'localhost',
-      'PORT': '5432',  
-    }
+    'default' : dj_database_url.parse(config("DATABASE_URL"))
 }
 
 

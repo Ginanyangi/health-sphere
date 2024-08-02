@@ -197,6 +197,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Your React app's URL
     'http://localhost:8000',
-    'https://health-sphere-ft.vercel.app/',
+    'https://health-sphere-ft.vercel.app',
     'https://health-sphere.onrender.com',
 ]
